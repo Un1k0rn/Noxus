@@ -11,6 +11,15 @@
     "port": "27017",
 	"database": "Noxus"
   },
+
+  "zaaps": {
+	"all_zaaps": true
+  },
+
+  "monsters" : {
+	  "groups_per_map": 3
+  },
+
   "breeds_allowed": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   "characters_start": {
 	"level": "150",
