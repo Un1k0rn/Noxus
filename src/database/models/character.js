@@ -270,8 +270,9 @@ export default class Character {
 	getHumanOption()
 	{
 		var options = new Array();
-		// TODO: Guilde, Alliance, Ornaments, Emotes
+		// TODO: Guilde, Alliance, Emotes
 		options.push(new Types.HumanOptionTitle(this.activeTitle, ""));
+		options.push(new Types.HumanOptionOrnament(this.activeOrnament));
 		return options;
 	}
 
@@ -556,30 +557,99 @@ export default class Character {
         this.save();
     }
 
+	refreshActor()
+	{
+		this.client.send(new Messages.GameRolePlayShowActorMessage(this.getGameRolePlayCharacterInformations(this.client.account)));
+	}
+
+	isValidTitle(titleId) {
+		var titles = DataCenter.titles;
+		for(var i in titles) {
+			if(titles[i]._id == titleId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	addTitle(titleId) {
-		this.titles.push(titleId);
-		this.save();
-		this.client.send(new Messages.TitleGainedMessage(titleId));
+		if(this.isValidTitle(titleId))
+		{
+			if(this.titles.indexOf(titleId) == -1) {
+				this.titles.push(titleId);
+				this.client.send(new Messages.TitleGainedMessage(titleId));
+				this.save();
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	addAllTitles() {
+		for(var i in DataCenter.titles) {
+				this.addTitle(DataCenter.titles[i]._id);
+		}
 	}
 
 	selectTitle(titleId) {
 		for(var i = 0 ; i < this.titles.length ; i++) {
 			if(this.titles[i] == titleId) {
-				Logger.debug("Found title in current owned titles");
 				this.activeTitle = titleId;
 				this.save();
+				this.refreshActor();
 				return true;
 			}
 		}
 		this.activeTitle = 0;
 		this.save();
+		this.refreshActor();
+		return false;
+	}
+
+	isValidOrnament(ornamentId) {
+		var ornaments = DataCenter.ornaments;
+		for(var i in ornaments) {
+			if(ornaments[i]._id == ornamentId) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	addOrnament(ornamentId) {
-		this.ornaments.push(ornamentId);
+		if(this.isValidOrnament(ornamentId))
+		{
+			if(this.ornaments.indexOf(ornamentId) == -1) {
+			var length = this.ornaments.push(ornamentId);
+				this.client.send(new Messages.OrnamentGainedMessage(ornamentId));
+				this.save();
+				return 1;
+			}
+			return 0;
+		}
+		return -1;
+	}
+
+	addAllOrnaments() {
+		for(var i in DataCenter.ornaments) {
+			this.addOrnament(DataCenter.ornaments[i]._id);
+		}
+	}
+
+	selectOrnament(ornamentId) {
+		for(var i = 0 ; i < this.ornaments.length ; i++) {
+			if(this.ornaments[i] == ornamentId) {
+				this.activeOrnament = ornamentId;
+				this.save();
+				this.refreshActor();
+				return true;
+			}
+		}
+		this.activeOrnament = 0;
 		this.save();
-		this.client.send(new Messages.OrnamentGainedMessage(ornamentId));
+		this.refreshActor();
+		return false;
 	}
 
     isBusy() {

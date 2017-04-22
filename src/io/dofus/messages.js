@@ -4935,43 +4935,17 @@ export class TitlesAndOrnamentsListMessage extends ProtocolMessage {
 	serialize() {
 		this.buffer.writeShort(this.titles.length);
 		for (var i = 0; i < this.titles.length ; i++) {
-			Logger.debug("T: " + i);
 			this.buffer.writeVarShort(this.titles[i]);
 		}
 
 		this.buffer.writeShort(this.ornaments.length);
 		for (var i = 0; i < this.ornaments.length ; i++) {
-			Logger.debug("O: " + i);
 			this.buffer.writeVarShort(this.ornaments[i]);
 		}
 
 		this.buffer.writeVarShort(this.activeTitle);
 		this.buffer.writeVarShort(this.activeOrnament);
 	}
-
-/*
-	deserialize(buffer) {
-		Logger.debug("Never deserializing right ?");
-		var titlesLength = buffer.readShort();
-		this.titles = new Array();
-		var cpt = 0;
-		while(cpt < titlesLength) {
-			this.titles.push(buffer.readShort());
-			cpt++;
-		}
-
-		var ornamentsLength = buffer.readShort();
-		this.ornaments = new Array();
-		cpt = 0;
-		while(cpt < ornamentsLength) {
-			this.ornaments.push(buffer.readShort());
-			cpt++;
-		}
-
-		this.activeTitle = buffer.readShort();
-		this.activeOrnament = buffer.readShort();
-	}
-	*/
 }
 
 export class OrnamentGainedMessage extends ProtocolMessage {
@@ -4983,11 +4957,43 @@ export class OrnamentGainedMessage extends ProtocolMessage {
 	serialize() {
 		this.buffer.writeShort(this.ornamentId);
 	}
-/*
+}
+
+
+export class OrnamentSelectRequestMessage extends ProtocolMessage {
+	constructor(ornamentId)
+	{
+		super(6374)
+		this.ornamentId = ornamentId;
+	}
+
 	deserialize(buffer) {
-		this.ornamentId = buffer.readShort();
-		Logger.infos("[Deserialize] Ornament id : (" + this.ornamentId + ")");
-	}*/
+		this.ornamentId = buffer.readVarUhShort(this.ornamentId);
+	}
+}
+
+export class OrnamentSelectMessage extends ProtocolMessage {
+	constructor(ornamentId)
+	{
+		super(6369)
+		this.ornamentId = ornamentId;
+	}
+
+	serialize() {
+		this.buffer.writeVarShort(this.ornamentId);
+	}
+}
+
+export class OrnamentSelectErrorMessage extends ProtocolMessage {
+	constructor(reason)
+	{
+		super(6370)
+		this.reason = reason;
+	}
+
+	serialize() {
+		this.buffer.writeByte(this.reason);
+	}
 }
 
 export class TitleGainedMessage extends ProtocolMessage {
@@ -4999,11 +5005,6 @@ export class TitleGainedMessage extends ProtocolMessage {
 	serialize() {
 		this.buffer.writeVarShort(this.titleId);
 	}
-
-/*
-	deserialize(buffer) {
-		this.titleId = buffer.readVarUhShort();
-	}*/
 }
 
 export class TitleSelectRequestMessage extends ProtocolMessage {
@@ -5012,11 +5013,7 @@ export class TitleSelectRequestMessage extends ProtocolMessage {
 		super(6365)
 		this.titleId = titleId;
 	}
-/*
-	serialize() {
-		this.buffer.writeVarShort(this.titleId);
-	}
-*/
+
 	deserialize(buffer) {
 		this.titleId = buffer.readVarUhShort(this.titleId);
 	}
@@ -5032,10 +5029,6 @@ export class TitleSelectMessage extends ProtocolMessage {
 	serialize() {
 		this.buffer.writeVarShort(this.titleId);
 	}
-/*
-	deserialize(buffer) {
-		this.titleId = buffer.readVarUhShort(this.titleId);
-	}*/
 }
 
 export class TitleSelectErrorMessage extends ProtocolMessage {
@@ -5048,8 +5041,4 @@ export class TitleSelectErrorMessage extends ProtocolMessage {
 	serialize() {
 		this.buffer.writeByte(this.reason);
 	}
-/*
-	deserialize(buffer) {
-		this.titleId = buffer.readByte();
-	}*/
 }

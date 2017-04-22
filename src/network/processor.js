@@ -109,9 +109,10 @@ export default class Processor {
         // Finish move handler
         6702 : {message: Messages.FinishMoveListRequestMessage, handler: FinishMoveHandler.handleFinishMoveListRequestMessage },
 
-		// Ornaments
+		// Ornaments & Title
 		6363: {message: Messages.TitlesAndOrnamentsListRequestMessage, handler: TitlesAndOrnamentsHandler.handleTitlesAndOrnamentsListRequestMessage },
-		6365: {message: Messages.TitleSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleTitleSelectRequestMessage }
+		6365: {message: Messages.TitleSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleTitleSelectRequestMessage },
+		6374: {message: Messages.OrnamentSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleOrnamentSelectRequestMessage }
 }
 
     static handle(client, messageId, buffer) {

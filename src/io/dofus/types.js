@@ -325,10 +325,26 @@ export class HumanOptionTitle extends HumanOption {
 		buffer.writeUTF(this.titleParam);
 	}
 
+/*
 	deserialize(buffer) {
 		super.deserialize(buffer);
 		this.titleId = buffer.readVarUhShort();
 		this.titleParam = readUTF();
+	}
+*/
+}
+
+export class HumanOptionOrnament extends HumanOption {
+	constructor(ornamentId)
+	{
+		super();
+		this.protocolId = 411;
+		this.ornamentId = ornamentId;
+	}
+
+	serialize(buffer) {
+		super.serialize(buffer);
+		buffer.writeVarShort(this.ornamentId);
 	}
 }
 
