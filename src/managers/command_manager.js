@@ -42,8 +42,10 @@ export default class CommandManager {
         { name:"spell", role:AccountRole.MODERATOR, description: "Permet d'apprendre un sort"},
         { name:"spellpoints", role:AccountRole.MODERATOR, description: "Permet d'ajouter des points de sort"},
         { name:"kill", role:AccountRole.MODERATOR, description: "Permet de tuer tout le monde"},
+		{ name:"title", role:AccountRole.MODERATOR, description: "Ajoute un titre"},
+		{ name:"ornament", role:AccountRole.MODERATOR, description: "Ajoute un ornement"},
     ];
-    
+
     static manageCommand(command, client)
     {
         try
@@ -82,7 +84,7 @@ export default class CommandManager {
         }
     }
 
-    static getTime(time) 
+    static getTime(time)
     {
         var now = WorldServer.startTime;
         var sec_num = (time - now) / 1000;
@@ -216,7 +218,7 @@ export default class CommandManager {
                         DBManager.updateAccount(account.uid, {locked: 0}, function()
                         {
                             client.character.replyText("Le personnage " + data[1] + " a bien été débanni !");
-                        });  
+                        });
                     }
                     else
                         client.character.replyError("Impossible car le compte du personnage n'est pas banni !");
@@ -469,6 +471,50 @@ export default class CommandManager {
         else
             client.character.replyError("Erreur de syntaxe (.spellpoints characterName spellPoints)");
     }
+
+	static handle_title(data, client)
+	{
+		if(data[1] && data[2]) { //characterName titleId
+			var target = WorldServer.getOnlineClientByCharacterName(data[1]);
+			if(target) {
+				target.character.addTitle(data[2]);
+				target.character.replyText("Vous avez reçu le titre (" + data[2] + ") !")
+				client.character.replyText("Le personnage " + data[1] + " a reçu le titre (" + data[2] + ") !");
+			}
+			else {
+				client.character.replyError("Impossible de trouvez le personnage <b> " + data[1] + "</b> !");
+			}
+		}
+		else if(data[1]) { //titleId
+			client.character.addTitle(data[1]);
+			client.character.replyText("Vous avez reçu le titre (" + data[1] + ") !")
+		}
+		else {
+			client.character.replyError("Erreur de syntaxe (.title (characterName) titleId)");
+		}
+	}
+
+	static handle_ornament(data, client)
+	{
+		if(data[1] && data[2]) { //characterName ornament
+			var target = WorldServer.getOnlineClientByCharacterName(data[1]);
+			if(target) {
+				target.character.addOrnament(data[2]);
+				target.character.replyText("Vous avez reçu l'ornement (" + data[2] + ") !")
+				client.character.replyText("Le personnage " + data[1] + " a reçu l'ornement (" + data[2] + ") !");
+			}
+			else {
+				client.character.replyError("Impossible de trouvez le personnage <b> " + data[1] + "</b> !");
+			}
+		}
+		else if(data[1]) { //OrnamentId
+			client.character.addOrnament(data[1]);
+			client.character.replyText("Vous avez reçu l'ornement (" + data[1] + ") !")
+		}
+		else {
+			client.character.replyError("Erreur de syntaxe (.ornament (characterName) ornamentId)");
+		}
+	}
 
     static handle_kill(data, client)
     {

@@ -3,7 +3,7 @@ import Common from "../common"
 
 export default class Logger {
 
-    static level = 1;
+    static level = 0;
 
     static drawAscii() {
         var v = "ALPHA VERSION v" + Common.NOXUS_VERSION.major + "." + Common.NOXUS_VERSION.minor;

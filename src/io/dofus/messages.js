@@ -4934,35 +4934,122 @@ export class TitlesAndOrnamentsListMessage extends ProtocolMessage {
 
 	serialize() {
 		this.buffer.writeShort(this.titles.length);
-		for (var i in this.titles) {
-			this.buffer.writeShort(this.titles[i]);
+		for (var i = 0; i < this.titles.length ; i++) {
+			Logger.debug("T: " + i);
+			this.buffer.writeVarShort(this.titles[i]);
 		}
 
 		this.buffer.writeShort(this.ornaments.length);
-		for (var i in this.ornaments) {
-			this.buffer.writeShort(this.ornaments[i]);
+		for (var i = 0; i < this.ornaments.length ; i++) {
+			Logger.debug("O: " + i);
+			this.buffer.writeVarShort(this.ornaments[i]);
 		}
 
-		this.buffer.writeShort(this.activeTitle);
-		this.buffer.writeShort(this.activeOrnament);
+		this.buffer.writeVarShort(this.activeTitle);
+		this.buffer.writeVarShort(this.activeOrnament);
 	}
 
+/*
 	deserialize(buffer) {
+		Logger.debug("Never deserializing right ?");
 		var titlesLength = buffer.readShort();
-		this.titles = new Array(titlesLength);
+		this.titles = new Array();
 		var cpt = 0;
 		while(cpt < titlesLength) {
-			this.titles[cpt++] = buffer.readShort();
+			this.titles.push(buffer.readShort());
+			cpt++;
 		}
 
 		var ornamentsLength = buffer.readShort();
-		this.ornaments = new Array(ornamentsLength);
+		this.ornaments = new Array();
 		cpt = 0;
 		while(cpt < ornamentsLength) {
-			this.ornaments[cpt++] = buffer.readShort();
+			this.ornaments.push(buffer.readShort());
+			cpt++;
 		}
 
 		this.activeTitle = buffer.readShort();
 		this.activeOrnament = buffer.readShort();
 	}
+	*/
+}
+
+export class OrnamentGainedMessage extends ProtocolMessage {
+	constructor(ornamentId) {
+		super(6368);
+		this.ornamentId = ornamentId;
+	}
+
+	serialize() {
+		this.buffer.writeShort(this.ornamentId);
+	}
+/*
+	deserialize(buffer) {
+		this.ornamentId = buffer.readShort();
+		Logger.infos("[Deserialize] Ornament id : (" + this.ornamentId + ")");
+	}*/
+}
+
+export class TitleGainedMessage extends ProtocolMessage {
+	constructor(titleId) {
+		super(6364);
+		this.titleId = titleId;
+	}
+
+	serialize() {
+		this.buffer.writeVarShort(this.titleId);
+	}
+
+/*
+	deserialize(buffer) {
+		this.titleId = buffer.readVarUhShort();
+	}*/
+}
+
+export class TitleSelectRequestMessage extends ProtocolMessage {
+	constructor(titleId)
+	{
+		super(6365)
+		this.titleId = titleId;
+	}
+/*
+	serialize() {
+		this.buffer.writeVarShort(this.titleId);
+	}
+*/
+	deserialize(buffer) {
+		this.titleId = buffer.readVarUhShort(this.titleId);
+	}
+}
+
+export class TitleSelectMessage extends ProtocolMessage {
+	constructor(titleId)
+	{
+		super(6366)
+		this.titleId = titleId;
+	}
+
+	serialize() {
+		this.buffer.writeVarShort(this.titleId);
+	}
+/*
+	deserialize(buffer) {
+		this.titleId = buffer.readVarUhShort(this.titleId);
+	}*/
+}
+
+export class TitleSelectErrorMessage extends ProtocolMessage {
+	constructor(reason)
+	{
+		super(6366)
+		this.reason = reason;
+	}
+
+	serialize() {
+		this.buffer.writeByte(this.reason);
+	}
+/*
+	deserialize(buffer) {
+		this.titleId = buffer.readByte();
+	}*/
 }

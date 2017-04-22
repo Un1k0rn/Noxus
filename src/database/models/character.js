@@ -267,9 +267,17 @@ export default class Character {
             false, false, false, false, false, false, false);
     }
 
+	getHumanOption()
+	{
+		var options = new Array();
+		// TODO: Guilde, Alliance, Ornaments, Emotes
+		options.push(new Types.HumanOptionTitle(this.activeTitle, ""));
+		return options;
+	}
+
     getGameRolePlayCharacterInformations(account) {
         return new Types.GameRolePlayCharacterInformations(this._id, this.getEntityLook(), new Types.EntityDispositionInformations(this.cellid, this.dirId),
-            this.name, new Types.HumanInformations(this.getCharacterRestrictions(), this.sex, []), account.uid, new Types.ActorAlignmentInformations(0, 0, 0, 0));
+            this.name, new Types.HumanInformations(this.getCharacterRestrictions(), this.sex, this.getHumanOption()), account.uid, new Types.ActorAlignmentInformations(0, 0, 0, 0));
     }
 
     getMap() {
@@ -547,6 +555,32 @@ export default class Character {
         this.spells.push(spell);
         this.save();
     }
+
+	addTitle(titleId) {
+		this.titles.push(titleId);
+		this.save();
+		this.client.send(new Messages.TitleGainedMessage(titleId));
+	}
+
+	selectTitle(titleId) {
+		for(var i = 0 ; i < this.titles.length ; i++) {
+			if(this.titles[i] == titleId) {
+				Logger.debug("Found title in current owned titles");
+				this.activeTitle = titleId;
+				this.save();
+				return true;
+			}
+		}
+		this.activeTitle = 0;
+		this.save();
+		return false;
+	}
+
+	addOrnament(ornamentId) {
+		this.ornaments.push(ornamentId);
+		this.save();
+		this.client.send(new Messages.OrnamentGainedMessage(ornamentId));
+	}
 
     isBusy() {
         if (this.dialog != null)

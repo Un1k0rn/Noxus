@@ -39,7 +39,7 @@ export class GameServerInformations {
         buffer.writeByte(this.completion);
         buffer.writeBoolean(this.isSelectable);
         buffer.writeByte(this.charactersCount);
-        buffer.writeByte(this.charactersCount > 0 ? 5 : 0);
+        buffer.writeByte(5);
         buffer.writeDouble(this.date);
     }
 }
@@ -295,9 +295,41 @@ export class HumanInformations {
         buffer.writeBoolean(this.sex);
         buffer.writeShort(this.options.length);
         for (var i in this.options) {
+			buffer.writeShort(this.options[i].protocolId);
             this.options[i].serialize(buffer);
         }
     }
+}
+export class HumanOption
+{
+	constructor() {
+		this.protocolId = 406;
+	}
+	serialize(buffer) {}
+
+	deserialize(buffer) {}
+}
+
+export class HumanOptionTitle extends HumanOption {
+	constructor(titleId, titleParam)
+	{
+		super();
+		this.protocolId = 408;
+		this.titleId = titleId;
+		this.titleParam = titleParam;
+	}
+
+	serialize(buffer) {
+		super.serialize(buffer);
+		buffer.writeVarShort(this.titleId);
+		buffer.writeUTF(this.titleParam);
+	}
+
+	deserialize(buffer) {
+		super.deserialize(buffer);
+		this.titleId = buffer.readVarUhShort();
+		this.titleParam = readUTF();
+	}
 }
 
 export class ActorRestrictionsInformations {

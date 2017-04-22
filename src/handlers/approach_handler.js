@@ -154,6 +154,10 @@ export default class ApproachHandler {
                     bagId: -1,
                     zaapSave : 0,
                     zaapKnows : [],
+					titles : [],
+					ornaments : [],
+					activeTitle : 0,
+					activeOrnament: 0,
                 }, true);
                 DBManager.createCharacter(character, function(){
                     client.send(new Messages.CharacterCreationResultMessage(0));
