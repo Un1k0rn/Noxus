@@ -12,6 +12,8 @@ export default class Datacenter {
     static smileys;
     static interactivesObjects;
     static emotes;
+	static ornaments;
+	static titles;
     static items;
     static itemsSets;
     static maps_positions;
@@ -40,8 +42,10 @@ export default class Datacenter {
             Datacenter.loadNpcActions,
             Datacenter.loadItemsSets,
             Datacenter.loadNpcsReplies,
-            Datacenter.loadMonsters
+            Datacenter.loadMonsters,
 
+			Datacenter.loadOrnaments,
+			Datacenter.loadTitles
         ];
         var loaded = 0;
 
@@ -103,8 +107,8 @@ export default class Datacenter {
             DBManager.getNpcSpawns(function (npcSpawns) {
                 for (var i in npcSpawns) {
                     var npc = Datacenter.getNpcs(npcSpawns[i].npcId);
-                    
-                    Datacenter.npcs.npcSpawns.push(new NpcSpawn(npcSpawns[i], LookManager.parseLook(npc.look),Datacenter.getNpcAction(npcSpawns[i].npcId)));                 
+
+                    Datacenter.npcs.npcSpawns.push(new NpcSpawn(npcSpawns[i], LookManager.parseLook(npc.look),Datacenter.getNpcAction(npcSpawns[i].npcId)));
                 }
 
                 Logger.infos("Loaded '" + Datacenter.npcs.npcSpawns.length + "' npc_spawns");
@@ -119,7 +123,7 @@ export default class Datacenter {
         DBManager.getNpcReplies(function(npcReplies) {
                 Datacenter.npcs.npcReplies = npcReplies;
                 Logger.infos("Loaded '" + Datacenter.npcs.npcReplies.length + "' npcs_replies");
-                callback();  
+                callback();
         });
     }
 
@@ -127,7 +131,7 @@ export default class Datacenter {
         DBManager.getNpcItems(function(npcItems) {
                 Datacenter.npcs.npcItems = npcItems;
                 Logger.infos("Loaded '" + Datacenter.npcs.npcItems.length + "' npcs_items");
-                callback();  
+                callback();
         });
     }
 
@@ -210,6 +214,22 @@ export default class Datacenter {
         });
     }
 
+	static loadOrnaments(callback) {
+		DBManager.getOrnaments(function (ornaments) {
+			Datacenter.ornaments = ornaments;
+			Logger.infos("Loaded '" + ornaments.length + "' ornament(s)");
+			callback();
+		});
+	}
+
+	static loadTitles(callback) {
+		DBManager.getTitles(function (titles) {
+			Datacenter.titles = titles;
+			Logger.infos("Loaded '" + titles.length + "' titles(s)");
+			callback();
+		});
+	}
+
     static getMapScrollActionById(id) {
         for (var i in Datacenter.mapScrollsActions) {
             if (Datacenter.mapScrollsActions[i].id == id)
@@ -274,7 +294,7 @@ export default class Datacenter {
             }
         }
 
-        return result;       
+        return result;
     }
 
 
@@ -287,7 +307,7 @@ export default class Datacenter {
             }
         }
 
-        return result;       
+        return result;
     }
 
     static getNpcItems(id){
@@ -298,7 +318,7 @@ export default class Datacenter {
             }
         }
 
-        return result;  
+        return result;
     }
 
 }

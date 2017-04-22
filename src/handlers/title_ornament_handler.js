@@ -1,7 +1,7 @@
 import Logger from "../io/logger"
 import * as Messages from "../io/dofus/messages"
 
-export class TitlesAndOrnamentsHandler {
+export default class TitlesAndOrnamentsHandler {
 	static handleTitlesAndOrnamentsListRequestMessage(client, packet)
 	{
 		client.send(new Messages.TitlesAndOrnamentsListMessage(

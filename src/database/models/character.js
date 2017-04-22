@@ -56,6 +56,11 @@ export default class Character {
         this.regenTimestamp = Math.floor(Date.now() / 1000);
         this.spells = raw.spells ? raw.spells : [];
 
+		this.ornaments = raw.ornaments ? raw.ornaments : [];
+		this.titles = raw.titles ? raw.titles : [];
+		this.activeTitle = raw.activeTitle;
+		this.activeOrnament = raw.activeOrnament;
+
         // Bag creation
         if (this.bagId == -1) {
             if (!creation) {
@@ -180,10 +185,10 @@ export default class Character {
     }
 
     refreshEntityLook() {
-        
+
         var appearenceToShow = [];
         appearenceToShow.push(parseInt(this.getBaseSkin()));
-       
+
         appearenceToShow.push(parseInt(this.getHeadSkinId()));
         if (this.itemBag) {
             if (this.itemBag.getItemAtPosition(6)) appearenceToShow.push(this.itemBag.getItemAtPosition(6).getTemplate().appearanceId); // Head
@@ -191,7 +196,7 @@ export default class Character {
             if (this.itemBag.getItemAtPosition(15)) appearenceToShow.push(this.itemBag.getItemAtPosition(15).getTemplate().appearanceId); // Bouclier
         }
         this.skins = appearenceToShow;
-        
+
          if(this.skinsLook.length > 0 ){
             for(var i of this.skinsLook){
                 this.skins.push(i);
@@ -237,7 +242,7 @@ export default class Character {
 
     getEntityLook() {
         this.refreshEntityLook();
-       
+
         var characterColors = this.getColors();
         if(this.isRiding()) {
             return new Types.EntityLook(this.itemBag.getItemAtPosition(8).getTemplate().appearanceId, [],
@@ -248,7 +253,7 @@ export default class Character {
                 this.getColors(), [this.scale], this.getSubentities());
         }
     }
-  
+
 
     ///////////////////////////
 
@@ -402,7 +407,13 @@ export default class Character {
                 intelligence: this.statsManager.getStatById(15).base,
             },
             zaapKnows : this.zaapKnows,
-            shortcuts: this.shortcuts
+            shortcuts: this.shortcuts,
+
+			titles : this.titles,
+			ornaments : this.ornaments,
+			activeTitle: this.activeTitle,
+			activeOrnament: this.activeOrnament
+
         };
         DBManager.updateCharacter(this._id, toUpdate, function () {
             Logger.infos("Character '" + self.name + "(" + self._id + ")' saved");

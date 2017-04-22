@@ -14,7 +14,7 @@ export default class DBManager {
     static db;
 
     static start(callback) {
-        var url = 'mongodb://' + ConfigManager.configData.mongodb.host + ':' + ConfigManager.configData.mongodb.port + '/' 
+        var url = 'mongodb://' + ConfigManager.configData.mongodb.host + ':' + ConfigManager.configData.mongodb.port + '/'
         + ConfigManager.configData.mongodb.database;
         MongoClient.connect(url, function(err, db) {
             if (err)
@@ -59,7 +59,7 @@ export default class DBManager {
                     life: character.life,
                     bagId: character.bagId,
                     statsPoints: character.statsPoints,
-                    spellPoints: character.spellPoints,                    
+                    spellPoints: character.spellPoints,
                     zaapKnows:character.zaapKnows,
                     zaapSave:character.zaapSave,
                     spells: character.spells,
@@ -73,8 +73,13 @@ export default class DBManager {
                         intelligence: character.statsManager.getStatById(15).base,
                     },
                     emotes: EmoteHandler.getAllEmotes(),
-                   
-                    
+
+					ornaments: character.ornaments,
+					titles: character.titles,
+					activeTitle: character.activeTitle,
+					activeOrnament: character.activeOrnament,
+
+
                 }, function(){
                     character._id = autoIndex;
                     callback(character);
@@ -322,21 +327,21 @@ export default class DBManager {
         var collection = DBManager.db.collection('interactives_objects');
         collection.find({}).toArray(function(err, interactivesObjects){
             callback(interactivesObjects);
-        });              
+        });
     }
 
     static getMapPositions(callback) {
         var collection = DBManager.db.collection('maps_positions');
         collection.find({}).toArray(function(err, maps_positions){
             callback(maps_positions);
-        });              
+        });
     }
 
     static getEmotes(callback) {
         var collection = DBManager.db.collection('emoticons');
         collection.find({}).toArray(function(err, emoticons){
             callback(emoticons);
-        });              
+        });
     }
 
     static getItems(callback) {
@@ -451,4 +456,18 @@ export default class DBManager {
             callback(monsters);
         });
     }
+
+	static getOrnaments(callback) {
+		var collection = DBManager.db.collection('ornaments');
+		collection.find({}).toArray(function(err, ornaments){
+			callback(ornaments);
+		});
+	}
+
+	static getTitles(callback) {
+		var collection = DBManager.db.collection('titles');
+		collection.find({}).toArray(function(err, titles){
+			callback(titles);
+		});
+	}
 }
