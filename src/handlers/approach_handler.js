@@ -21,7 +21,7 @@ export default class ApproachHandler {
 
     static getOptionalFeatures()
     {
-        var features = []; 
+        var features = [];
         return features;
     }
 
@@ -55,7 +55,7 @@ export default class ApproachHandler {
     static handleCharactersListRequestMessage(client, packet) {
         ApproachHandler.sendCharactersList(client);
     }
-    
+
     static sendCharactersList(client) {
         DBManager.getCharacters({accountId: client.account.uid}, function(characters){
             var fnNext = function() {
@@ -210,7 +210,7 @@ export default class ApproachHandler {
                 var index = client.characters.indexOf(client.characters[character]);
                 if (index != -1)
                     client.characters.splice(index, 1);
-                return;
+                return true;
             }
         }
         return false;
@@ -224,7 +224,7 @@ export default class ApproachHandler {
             {
                 if (success) {
                     ApproachHandler.removeCharacter(packet.characterId, client);
-                    setTimeout(function() {ApproachHandler.sendCharactersList(client)}, 200);
+                    setTimeout(function() {ApproachHandler.sendCharactersList(client)}, 50);
                 }
                 else
                     ApproachHandler.sendCharacterDeletionError(1, client);

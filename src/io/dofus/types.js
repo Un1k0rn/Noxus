@@ -39,7 +39,7 @@ export class GameServerInformations {
         buffer.writeByte(this.completion);
         buffer.writeBoolean(this.isSelectable);
         buffer.writeByte(this.charactersCount);
-        buffer.writeByte(this.charactersCount > 0 ? 0 : 5);
+        buffer.writeByte(this.charactersCount > 0 ? 5 : 0);
         buffer.writeDouble(this.date);
     }
 }
@@ -269,7 +269,8 @@ export class ActorExtendedAlignmentInformations extends ActorAlignmentInformatio
         super(alignmentSide, alignmentValue, alignmentGrade, characterPower);
         this.honor = honor;
         this.honorGradeFloor = honorGradeFloor;
-        this.honorNextGradeFloor = aggressable;
+        this.honorNextGradeFloor = honorNextGradeFloor;
+		this.aggressable = aggressable;
     }
 
     serialize(buffer) {
@@ -1434,7 +1435,7 @@ serialize(buffer){
          {
             Logger.error("Forbidden value (" + this.elementId + ") on element elementId.");
          }
-  
+
          buffer.writeInt(this.elementId);
          buffer.writeInt(this.elementTypeId);
          buffer.writeShort(this.enabledSkills.length);
