@@ -4912,6 +4912,17 @@ export class FinishMoveListMessage extends ProtocolMessage {
     }
 }
 
+// Ask for ornaments & titles
+export class TitlesAndOrnamentListRequestMessage extends ProtocolMessage {
+	constructor() {
+		super(6363);
+	}
+
+	serialize() {}
+	deserialize(buffer) {}
+}
+
+// Return ornaments & titles list
 export class TitlesAndOrnamentListMessage extends ProtocolMessage {
 	constructor(titles, ornaments, activeTitle, activeOrnament) {
 		super(6367);

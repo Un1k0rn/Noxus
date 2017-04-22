@@ -18,6 +18,7 @@ import FightHandler from "../handlers/fight_handler"
 import ExchangeHandler from "../handlers/exchange_handler"
 import NpcHandler from "../handlers/npc_handler"
 import FinishMoveHandler from "../handlers/finish_move_handler"
+import TitlesAndOrnamentsHandler from "../handlers/title_ornament_handler"
 
 export default class Processor {
 
@@ -107,7 +108,10 @@ export default class Processor {
 
         // Finish move handler
         6702 : {message: Messages.FinishMoveListRequestMessage, handler: FinishMoveHandler.handleFinishMoveListRequestMessage },
-} 
+
+		// Ornaments
+		6363: {message: Messages.TitlesAndOrnamentsListRequestMessage, handler : TitlesAndOrnamentsHandler.handleTitlesAndOrnamentsListRequestMessage},
+}
 
     static handle(client, messageId, buffer) {
         var handler = Processor.PROTOCOL_HANDLERS[parseInt(messageId)];
@@ -129,5 +133,5 @@ export default class Processor {
         }
     }
 
-    
+
 }
