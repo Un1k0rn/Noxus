@@ -4911,3 +4911,47 @@ export class FinishMoveListMessage extends ProtocolMessage {
         }
     }
 }
+
+export class TitlesAndOrnamentListMessage extends ProtocolMessage {
+	constructor(titles, ornaments, activeTitle, activeOrnament) {
+		super(6367);
+		this.titles = titles;
+		this.ornaments = ornaments;
+		this.activeTitle = activeTitle;
+		this.activeOrnament = activeOrnament;
+	}
+
+	serialize() {
+		this.buffer.writeShort(this.titles.length);
+		for (var i in this.titles) {
+			this.buffer.writeShort(this.titles[i]);
+		}
+
+		this.buffer.writeShort(this.ornaments.length);
+		for (var i in this.ornaments) {
+			this.buffer.writeShort(this.ornaments[i]);
+		}
+
+		this.buffer.writeShort(this.activeTitle);
+		this.buffer.writeShort(this.activeOrnament);
+	}
+
+	deserialize(buffer) {
+		var titlesLength = buffer.readShort();
+		this.titles = new Array(titlesLength);
+		var cpt = 0;
+		while(cpt < titlesLength) {
+			this.titles[cpt++] = buffer.readShort();
+		}
+
+		var ornamentsLength = buffer.readShort();
+		this.ornaments = new Array(ornamentsLength);
+		cpt = 0;
+		while(cpt < ornamentsLength) {
+			this.ornaments[cpt++] = buffer.readShort();
+		}
+
+		this.activeTitle = buffer.readShort();
+		this.activeOrnament = buffer.readShort();
+	}
+}
