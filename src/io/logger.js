@@ -14,7 +14,6 @@ export default class Logger {
         console.log("   | |\\  | (_) >  <| |_| \\__ \\".cyan + "    By Yuki, Arkalius and Yamisaaf".yellow);
         console.log("   \\_| \\_/\\___/_/\\_\\\\__,_|___/".cyan + "    " + v.red);
         console.log(" _________________________________________________________________ \n".yellow)
-
     }
 
     static log(color, header, message) {
@@ -40,4 +39,8 @@ export default class Logger {
     static warning(message) {
         Logger.log("yellow", "WARNING", message);
     }
+
+	static todo(message) {
+		Logger.log("rainbow", "TODO", message);
+	}
 }

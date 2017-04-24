@@ -250,6 +250,7 @@ export class GameRolePlayCharacterInformations extends GameRolePlayHumanoidInfor
 
 export class ActorAlignmentInformations {
     constructor(alignmentSide, alignmentValue, alignmentGrade, characterPower) {
+		this.protocolId = 201;
         this.alignmentSide = alignmentSide;
         this.alignmentValue = alignmentValue;
         this.alignmentGrade = alignmentGrade;
@@ -262,11 +263,16 @@ export class ActorAlignmentInformations {
         buffer.writeByte(this.alignmentGrade);
         buffer.writeDouble(this.characterPower);
     }
+
+	deserialize(buffer) {
+		Logger.todo("deserialize ActorAlignmentInformations")
+	}
 }
 
 export class ActorExtendedAlignmentInformations extends ActorAlignmentInformations {
     constructor(alignmentSide, alignmentValue, alignmentGrade, characterPower, honor, honorGradeFloor, honorNextGradeFloor, aggressable) {
         super(alignmentSide, alignmentValue, alignmentGrade, characterPower);
+		this.protocolId = 202;
         this.honor = honor;
         this.honorGradeFloor = honorGradeFloor;
         this.honorNextGradeFloor = honorNextGradeFloor;
@@ -280,6 +286,10 @@ export class ActorExtendedAlignmentInformations extends ActorAlignmentInformatio
         buffer.writeVarShort(this.honorNextGradeFloor);
         buffer.writeByte(this.aggressable);
     }
+
+	deserialize(buffer) {
+		Logger.todo("deserialize ActorExtendedAlignmentInformations");
+	}
 }
 
 export class HumanInformations {

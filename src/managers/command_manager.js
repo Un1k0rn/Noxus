@@ -45,7 +45,12 @@ export default class CommandManager {
 		{ name:"title", role:AccountRole.MODERATOR, description: "Ajoute un titre"},
 		{ name:"ornament", role:AccountRole.MODERATOR, description: "Ajoute un ornement"},
 		{ name:"ornaments", role:AccountRole.ADMINISTRATOR, description: "Vous ajoute tous les ornaments du jeu."},
-		{ name:"titles", role:AccountRole.ADMINISTRATOR, description: "Vous ajoute tous les titres du jeu."}
+		{ name:"titles", role:AccountRole.ADMINISTRATOR, description: "Vous ajoute tous les titres du jeu."},
+		{ name:"bonta", role:AccountRole.PLAYER, description: "Who cares ?"},
+		{ name:"brak", role:AccountRole.PLAYER, description: "Who cares ?"},
+		{ name:"mercenaire", role:AccountRole.PLAYER, description: "Who cares ?"},
+		{ name:"neutre", role:AccountRole.PLAYER, description: "Who cares ?"},
+		{ name:"honor", role:AccountRole.MODERATOR, description: "Who cares ?"}
 	];
 
 	static manageCommand(command, client)
@@ -555,6 +560,33 @@ export default class CommandManager {
 			else {
 				target.character.replyError(target.character.name + " possède déjà cet ornement.");
 			}
+		}
+	}
+
+	static handle_bonta(data, client) {
+		client.character.setAlignement(1, true);
+	}
+
+	static handle_brak(data, client) {
+		client.character.setAlignement(2, true);
+	}
+
+	static handle_mercenaire(data, client)	{
+		client.character.setAlignement(3, true);
+	}
+
+	static handle_neutre(data, client)
+	{
+		client.character.setAlignement(0, true);
+	}
+
+	static handle_honor(data, client)
+	{
+		if(data[1]) {
+			client.character.addHonor(data[1], true);
+		}
+		else {
+			client.character.replyError("Wrong command");
 		}
 	}
 

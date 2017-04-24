@@ -182,16 +182,25 @@ export default class StatsManager {
     }
 
     getActorExtendedAlignmentInformations() {
-        return new Types.ActorExtendedAlignmentInformations(0, 0, 0, 0, 0, 0, 0, 0);
+        return new Types.ActorExtendedAlignmentInformations(
+			this.character.alignmentSide,
+			this.character.alignmentValue,
+			this.character.alignmentGrade,
+			this.character.characterPower,
+			this.character.honor,
+			this.character.alignmentGrade <= 0 ? 0 : this.getHonorFloor().honor,
+			this.character.alignmentGrade <= 0 ? 0 : this.getNextHonorFloor().honor,
+			this.character.aggressable ? 10 : 0
+		);
     }
 
     getCharacterCharacteristicsInformations() {
         return new Types.CharacterCharacteristicsInformations(
             this.character.experience, this.getExperienceFloor().xp,
-            this.getNextExperienceFloor() ? this.getNextExperienceFloor().xp : this.getExperienceFloor().xp, 
+            this.getNextExperienceFloor() ? this.getNextExperienceFloor().xp : this.getExperienceFloor().xp,
             this.character.itemBag.money,
-            this.character.statsPoints, 0, 
-            this.character.spellPoints, 
+            this.character.statsPoints, 0,
+            this.character.spellPoints,
             this.getActorExtendedAlignmentInformations(),
             this.character.life, this.getMaxLife(), 10000, 10000,
             this.character.isInFight() ? this.character.fighter.current.AP : this.getTotalStats(1),
@@ -294,6 +303,24 @@ export default class StatsManager {
             CharacterManager.learnSpellsForCharacter(this.character);
         }
     }
+
+	getHonorFloor() {
+		return CharacterManager.getHonorFloorByGrade(this.character.alignmentGrade);
+	}
+
+	getNextHonorFloor() {
+		return CharacterManager.getHonorFloorByGrade(this.character.alignmentGrade + 1);
+	}
+
+	checkGradeUp() {
+		var currentGrade = this.character.alignmentGrade;
+		var floor = CharacterManager.getHonorFloorByHonor(this.character.honor);
+		if(currentGrade != floor.level) { // Grade Up
+			this.character.alignmentGrade = floor.level;
+			this.character.updateAlignmentInformations();
+		}
+	}
+
 
     getSpellsItemList() {
         var spells = [];

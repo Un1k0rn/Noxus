@@ -94,6 +94,24 @@ export default class CharacterManager {
         return floor;
     }
 
+	static getHonorFloorByGrade(grade) {
+		return Datacenter.experiences.filter(function (x) {
+			if(x.level == grade) {
+				return x;
+			}
+		})[0];
+	}
+
+	static getHonorFloorByHonor(honor) {
+		var floor = null;
+		for (var i in Datacenter.experiences) {
+			if (Datacenter.experiences[i].honor <= honor && Datacenter.experiences[i].level <= 10)
+				floor = Datacenter.experiences[i];
+		}
+		return floor;
+	}
+
+
     static onDisconnect(character)
     {
         if (character.party != null)

@@ -4963,19 +4963,19 @@ export class OrnamentGainedMessage extends ProtocolMessage {
 export class OrnamentSelectRequestMessage extends ProtocolMessage {
 	constructor(ornamentId)
 	{
-		super(6374)
+		super(6374);
 		this.ornamentId = ornamentId;
 	}
 
 	deserialize(buffer) {
-		this.ornamentId = buffer.readVarUhShort(this.ornamentId);
+		this.ornamentId = buffer.readVarUhShort();
 	}
 }
 
 export class OrnamentSelectMessage extends ProtocolMessage {
 	constructor(ornamentId)
 	{
-		super(6369)
+		super(6369);
 		this.ornamentId = ornamentId;
 	}
 
@@ -4987,7 +4987,7 @@ export class OrnamentSelectMessage extends ProtocolMessage {
 export class OrnamentSelectErrorMessage extends ProtocolMessage {
 	constructor(reason)
 	{
-		super(6370)
+		super(6370);
 		this.reason = reason;
 	}
 
@@ -5010,12 +5010,12 @@ export class TitleGainedMessage extends ProtocolMessage {
 export class TitleSelectRequestMessage extends ProtocolMessage {
 	constructor(titleId)
 	{
-		super(6365)
+		super(6365);
 		this.titleId = titleId;
 	}
 
 	deserialize(buffer) {
-		this.titleId = buffer.readVarUhShort(this.titleId);
+		this.titleId = buffer.readVarUhShort();
 	}
 }
 
@@ -5040,5 +5040,31 @@ export class TitleSelectErrorMessage extends ProtocolMessage {
 
 	serialize() {
 		this.buffer.writeByte(this.reason);
+	}
+}
+
+export class AlignementRankUpdateMessage extends ProtocolMessage {
+	constructor(rank, verbose) {
+		super(6058);
+		this.alignmentRank = rank;
+		this.verbose = verbose;
+	}
+
+	serialize() {
+		this.buffer.writeByte(this.alignmentRank);
+		this.buffer.writeBoolean(this.verbose);
+	}
+}
+
+export class SetEnablePVPRequestMessage extends ProtocolMessage {
+	constructor(enable)
+	{
+		super(1810);
+		this.enable = enable;
+	}
+
+	deserialize(buffer) {
+		this.enable = buffer.readBoolean();
+		Logger.debug(this.enable);
 	}
 }

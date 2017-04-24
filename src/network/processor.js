@@ -19,6 +19,7 @@ import ExchangeHandler from "../handlers/exchange_handler"
 import NpcHandler from "../handlers/npc_handler"
 import FinishMoveHandler from "../handlers/finish_move_handler"
 import TitlesAndOrnamentsHandler from "../handlers/title_ornament_handler"
+import PvPHandler from "../handlers/pvp_handler"
 
 export default class Processor {
 
@@ -112,7 +113,10 @@ export default class Processor {
 		// Ornaments & Title
 		6363: {message: Messages.TitlesAndOrnamentsListRequestMessage, handler: TitlesAndOrnamentsHandler.handleTitlesAndOrnamentsListRequestMessage },
 		6365: {message: Messages.TitleSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleTitleSelectRequestMessage },
-		6374: {message: Messages.OrnamentSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleOrnamentSelectRequestMessage }
+		6374: {message: Messages.OrnamentSelectRequestMessage, handler: TitlesAndOrnamentsHandler.handleOrnamentSelectRequestMessage },
+
+		// PvP
+		1810: {message: Messages.SetEnablePVPRequestMessage, handler: PvPHandler.handleSetEnablePVPRequestMessage }
 }
 
     static handle(client, messageId, buffer) {

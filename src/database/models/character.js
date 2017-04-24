@@ -61,6 +61,13 @@ export default class Character {
 		this.activeTitle = raw.activeTitle;
 		this.activeOrnament = raw.activeOrnament;
 
+		this.alignmentSide = raw.alignmentSide;
+		this.alignmentValue = raw.alignmentValue;
+		this.alignmentGrade = raw.alignmentGrade;
+		this.honor = raw.honor;
+		this.characterPower = raw.characterPower;
+		this.aggressable = raw.aggressable;
+
         // Bag creation
         if (this.bagId == -1) {
             if (!creation) {
@@ -258,7 +265,6 @@ export default class Character {
     ///////////////////////////
 
     getCharacterBaseInformations() {
-        //return new Types.CharacterBaseInformations(this._id, this.name, this.level, this.getEntityLook(), this.breed, this.sex);
         return new Types.CharacterBaseInformations(this._id, this.name, this.level, this.getEntityLook(), this.breed, this.sex);
     }
 
@@ -267,8 +273,7 @@ export default class Character {
             false, false, false, false, false, false, false);
     }
 
-	getHumanOption()
-	{
+	getHumanOption() {
 		var options = new Array();
 		// TODO: Guilde, Alliance, Emotes
 		options.push(new Types.HumanOptionTitle(this.activeTitle, ""));
@@ -276,9 +281,15 @@ export default class Character {
 		return options;
 	}
 
+	getActorAlignementInformations() {
+		// TODO  Change this ?
+		this.client.send(new Messages.AlignementRankUpdateMessage(this.getAlignRank(this.alignmentSide), false));
+		return new Types.ActorAlignmentInformations(this.alignmentSide, this.alignmentValue, this.alignmentGrade, this.characterPower);
+	}
+
     getGameRolePlayCharacterInformations(account) {
         return new Types.GameRolePlayCharacterInformations(this._id, this.getEntityLook(), new Types.EntityDispositionInformations(this.cellid, this.dirId),
-            this.name, new Types.HumanInformations(this.getCharacterRestrictions(), this.sex, this.getHumanOption()), account.uid, new Types.ActorAlignmentInformations(0, 0, 0, 0));
+            this.name, new Types.HumanInformations(this.getCharacterRestrictions(), this.sex, this.getHumanOption()), account.uid, this.getActorAlignementInformations());
     }
 
     getMap() {
@@ -421,7 +432,14 @@ export default class Character {
 			titles : this.titles,
 			ornaments : this.ornaments,
 			activeTitle: this.activeTitle,
-			activeOrnament: this.activeOrnament
+			activeOrnament: this.activeOrnament,
+
+			alignmentSide : this.alignmentSide,
+			alignmentValue : this.alignmentValue,
+			alignmentGrade : this.alignmentGrade,
+			honor : this.honor,
+			characterPower: this.characterPower,
+			aggressable: this.aggressable,
 
         };
         DBManager.updateCharacter(this._id, toUpdate, function () {
@@ -650,6 +668,56 @@ export default class Character {
 		this.save();
 		this.refreshActor();
 		return false;
+	}
+
+	isValidSide(side) {
+		return side >= 0 && side <= 3;
+	}
+
+	getAlignRank(side) {
+		switch (side) {
+			case 0:
+				return 0;
+			case 1:
+				return 17;
+			case 2:
+				return 33;
+			case 3:
+				return 40;
+			default:
+				return 0;
+		}
+	}
+
+	updateAlignmentInformations() {
+		this.client.send(new Messages.AlignementRankUpdateMessage(this.getAlignRank(this.alignmentSide), false));
+		this.statsManager.sendStats();
+		this.refreshActor();
+	}
+
+	setAlignement(side, notif = true) {
+		if(this.isValidSide(side)) {
+			this.alignmentSide = side;
+			this.honor = 0;
+			this.alignmentValue = 1;
+			this.alignmentGrade = 1;
+			this.characterPower = 0;
+			this.aggressable = this.alignmentSide == 0 ? false : true;
+
+			this.updateAlignmentInformations();
+
+			if(notif) {
+				this.replyText("Vous êtes désormais " + this.alignmentSide + "." );
+			}
+		}
+	}
+
+	addHonor(amount, notif = true) {
+		this.honor += parseInt(amount);
+		this.honor = this.honor > 20000 ? 20000 : this.honor;
+		if(notif)
+			this.replyLangsMessage(0, 74, [amount]);
+		this.statsManager.checkGradeUp();
 	}
 
     isBusy() {

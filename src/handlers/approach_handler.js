@@ -150,14 +150,22 @@ export default class ApproachHandler {
                     cellid: ConfigManager.configData.characters_start.startCell,
                     dirId: ConfigManager.configData.characters_start.startDir,
                     statsPoints: (ConfigManager.configData.characters_start.level * 5) - 5,
-                    spellPoints: 0 + (ConfigManager.configData.characters_start.level) - 1,
+                    spellPoints: (ConfigManager.configData.characters_start.level) - 1,
                     bagId: -1,
                     zaapSave : 0,
                     zaapKnows : [],
+
 					titles : [],
 					ornaments : [],
 					activeTitle : 0,
 					activeOrnament: 0,
+
+					alignmentSide: 0,
+					alignmentValue: 0,
+					alignmentGrade: 0,
+					honor: 0,
+					characterPower: 0,
+					aggressable: 0,
                 }, true);
                 DBManager.createCharacter(character, function(){
                     client.send(new Messages.CharacterCreationResultMessage(0));
