@@ -5065,6 +5065,5 @@ export class SetEnablePVPRequestMessage extends ProtocolMessage {
 
 	deserialize(buffer) {
 		this.enable = buffer.readBoolean();
-		Logger.debug(this.enable);
 	}
 }

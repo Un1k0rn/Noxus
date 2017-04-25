@@ -17,7 +17,7 @@ export default class AdminHandler {
 
     static handleAdminQuietCommandMessage(client, packet)
     {
-        if (client.account.scope < AccountRole.ANIMATOR)
+        if (client.account.scope < AccountRole.ANIMATOR.value)
             return;
         var data = packet.content.split(" ");
         switch (data[0])

@@ -11,7 +11,7 @@ import ChatChannel from "../enums/chat_activable_channels_enum"
 import Character from "../database/models/character"
 import CommandManager from "../managers/command_manager"
 import IgnoredHandler from "../handlers/ignored_handler"
-import AccountRoleEnum from "../enums/account_role_enum"
+import AccountRole from "../enums/account_role_enum"
 
 export default class ChatHandler {
 
@@ -34,12 +34,12 @@ export default class ChatHandler {
             client.character.replyText("Le message n'a pas été envoyé : vous vous parlez à vous-même...");
             return;
         }
-        
+
         var time = Date.now || function() {return +new Date;};
         var clientTarget = WorldServer.getOnlineClientByCharacterName(packet.receiver);
         if (clientTarget)
         {
-            if (client.account.role < AccountRoleEnum.ADMINISTRATOR)
+            if (client.account.role < AccountRole.ADMINISTRATOR.value)
                 packet.content = ChatHandler.escapeHtml(packet.content);
             if (client.character.canSendMessage()) {
                 if (!IgnoredHandler.isIgnoringForSession(clientTarget, client.character) && !IgnoredHandler.isIgnoring(clientTarget, client.account)) {
@@ -61,7 +61,7 @@ export default class ChatHandler {
     {
         if (packet.content.length > 256)
             return;
-        if (client.account.role < AccountRoleEnum.ADMINISTRATOR)
+        if (client.account.role < AccountRole.ADMINISTRATOR.value)
             packet.content = ChatHandler.escapeHtml(packet.content);
         if (client.character.canSendMessage())
         {

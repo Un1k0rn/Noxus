@@ -17,6 +17,7 @@ import ItemManager from "../game/item/item_manager"
 import Datacenter from "../database/datacenter"
 import EmoteHandler from "../handlers/emote_handler"
 import DataCenter from "../database/datacenter"
+import AlignSideEnum from "../enums/alignment_side_enum"
 
 export default class CommandManager {
 
@@ -67,7 +68,7 @@ export default class CommandManager {
 					if (data[0] == CommandManager.commandsList[command].name)
 					{
 						commandFound = true;
-						if (client.account.scope >= CommandManager.commandsList[command].role)
+						if (client.account.scope >= CommandManager.commandsList[command].role.value)
 						{
 							CommandManager[(prefix + CommandManager.commandsList[command].name)](data, client);
 						}
@@ -85,7 +86,7 @@ export default class CommandManager {
 		}
 		catch (error)
 		{
-			if (client.account.scope >= AccountRole.ADMINISTRATOR)
+			if (client.account.scope >= AccountRole.ADMINISTRATOR.value)
 			client.character.replyError("Erreur sur la commande: " + error);
 			Logger.error(error);
 		}
@@ -145,9 +146,9 @@ export default class CommandManager {
 	{
 		for (var command in CommandManager.commandsList)
 		{
-			if (client.account.scope >= CommandManager.commandsList[command].role)
+			if (client.account.scope >= CommandManager.commandsList[command].role.value)
 			{
-				client.character.replyText(CommandManager.commandsList[command].name + " - " + CommandManager.commandsList[command].description);
+				client.character.replyText('<font color="' + CommandManager.commandsList[command].role.color + '" style="underline">' + CommandManager.commandsList[command].name + "</font> - " + CommandManager.commandsList[command].description);
 			}
 		}
 	}
