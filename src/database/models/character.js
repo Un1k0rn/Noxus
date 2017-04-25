@@ -13,7 +13,8 @@ import StatsManager from "../../game/stats/stats_manager"
 import ItemBag from "./item_bag"
 import Basic from "../../utils/basic"
 import DataCenter from "../../database/datacenter"
-import CharacterItem from "../../database/models/character_item";
+import CharacterItem from "../../database/models/character_item"
+import AlignSideEnum from "../../enums/alignment_side_enum"
 
 export default class Character {
 
@@ -283,8 +284,27 @@ export default class Character {
 
 	getActorAlignementInformations() {
 		// TODO  Change this ?
-		this.client.send(new Messages.AlignementRankUpdateMessage(this.getAlignRank(this.alignmentSide), false));
-		return new Types.ActorAlignmentInformations(this.alignmentSide, this.alignmentValue, this.alignmentGrade, this.characterPower);
+		//this.client.send(new Messages.AlignementRankUpdateMessage(this.getAlignRank(this.alignmentSide), false));
+		return new Types.ActorAlignmentInformations(
+			this.alignmentSide,
+			this.aggressable ? this.alignmentValue : 0,
+			this.aggressable ? this.alignmentGrade : 0,
+			this.characterPower
+		);
+	}
+
+	getActorExtendedAlignmentInformations() {
+		Logger.debug("Debug :" + this.alignmentSide + this.alignmentGrade + this.alignmentValue + this.characterPower + this.honor + this.aggressable);
+		return new Types.ActorExtendedAlignmentInformations(
+			this.alignmentSide,
+			this.aggressable ? this.alignmentValue : 0,
+			this.aggressable ? this.alignmentGrade : 0,
+			this.characterPower,
+			this.honor,
+			this.alignmentGrade <= 0 ? 0 : this.statsManager.getHonorFloor().honor,
+			this.alignmentGrade <= 0 ? 0 : this.statsManager.getNextHonorFloor().honor,
+			this.aggressable ? 10 : 0
+		);
 	}
 
     getGameRolePlayCharacterInformations(account) {
@@ -695,9 +715,18 @@ export default class Character {
 		this.refreshActor();
 	}
 
+	togglePvP(enable)
+	{
+		this.aggressable = enable;
+		if(enable)
+			this.client.send(new Messages.AlignementRankUpdateMessage(this.getAlignRank(this.alignmentSide), false));
+		this.statsManager.sendStats();
+		this.refreshActor();
+	}
+
 	setAlignement(side, notif = true) {
-		if(this.isValidSide(side)) {
-			this.alignmentSide = side;
+		if(this.isValidSide(side.value)) {
+			this.alignmentSide = side.value;
 			this.honor = 0;
 			this.alignmentValue = 1;
 			this.alignmentGrade = 1;
@@ -707,7 +736,7 @@ export default class Character {
 			this.updateAlignmentInformations();
 
 			if(notif) {
-				this.replyText("Vous êtes désormais " + this.alignmentSide + "." );
+				this.replyText("Vous êtes désormais <font color=\""+ side.color + "\" weight=\"bold\">" + side.name + "</font>.");
 			}
 		}
 	}

@@ -145,6 +145,7 @@ export default class CharacterManager {
         character.refreshShortcutsBar();
         CharacterManager.setRegenState(character);
         character.client.send(new Messages.AlmanachCalendarDateMessage(94));
+		character.client.send(new Messages.AlignementRankUpdateMessage(character.getAlignRank(character.alignmentSide), false));
     }
 
     static sendEmotesList(character)

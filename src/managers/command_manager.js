@@ -564,20 +564,20 @@ export default class CommandManager {
 	}
 
 	static handle_bonta(data, client) {
-		client.character.setAlignement(1, true);
+		client.character.setAlignement(AlignSideEnum.BONTA, true);
 	}
 
 	static handle_brak(data, client) {
-		client.character.setAlignement(2, true);
+		client.character.setAlignement(AlignSideEnum.BRAK, true);
 	}
 
 	static handle_mercenaire(data, client)	{
-		client.character.setAlignement(3, true);
+		client.character.setAlignement(AlignSideEnum.MERC, true);
 	}
 
 	static handle_neutre(data, client)
 	{
-		client.character.setAlignement(0, true);
+		client.character.setAlignement(AlignSideEnum.NEUTRE, true);
 	}
 
 	static handle_honor(data, client)

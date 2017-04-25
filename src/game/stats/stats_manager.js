@@ -181,19 +181,6 @@ export default class StatsManager {
         return this.getSetsByEffect(effectId, total);
     }
 
-    getActorExtendedAlignmentInformations() {
-        return new Types.ActorExtendedAlignmentInformations(
-			this.character.alignmentSide,
-			this.character.alignmentValue,
-			this.character.alignmentGrade,
-			this.character.characterPower,
-			this.character.honor,
-			this.character.alignmentGrade <= 0 ? 0 : this.getHonorFloor().honor,
-			this.character.alignmentGrade <= 0 ? 0 : this.getNextHonorFloor().honor,
-			this.character.aggressable ? 10 : 0
-		);
-    }
-
     getCharacterCharacteristicsInformations() {
         return new Types.CharacterCharacteristicsInformations(
             this.character.experience, this.getExperienceFloor().xp,
@@ -201,7 +188,7 @@ export default class StatsManager {
             this.character.itemBag.money,
             this.character.statsPoints, 0,
             this.character.spellPoints,
-            this.getActorExtendedAlignmentInformations(),
+            this.character.getActorExtendedAlignmentInformations(),
             this.character.life, this.getMaxLife(), 10000, 10000,
             this.character.isInFight() ? this.character.fighter.current.AP : this.getTotalStats(1),
             this.character.isInFight() ? this.character.fighter.current.MP : this.getTotalStats(2),
@@ -305,7 +292,9 @@ export default class StatsManager {
     }
 
 	getHonorFloor() {
-		return CharacterManager.getHonorFloorByGrade(this.character.alignmentGrade);
+		var a =  CharacterManager.getHonorFloorByGrade(this.character.alignmentGrade);
+		Logger.debug(JSON.stringify(a));
+		return a;
 	}
 
 	getNextHonorFloor() {

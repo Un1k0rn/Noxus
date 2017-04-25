@@ -79,6 +79,12 @@ export default class DBManager {
 					activeTitle: character.activeTitle,
 					activeOrnament: character.activeOrnament,
 
+					alignmentSide: character.alignmentSide,
+					alignmentValue: character.alignmentValue,
+					alignmentGrade: character.alignmentGrade,
+					honor: character.honor,
+					characterPower: character.characterPower,
+					aggressable: character.aggressable,
 
                 }, function(){
                     character._id = autoIndex;
