@@ -221,7 +221,7 @@ export class HelloConnectMessage extends ProtocolMessage {
     serialize() {
         this.buffer.writeUTF(this.salt);
         this.buffer.writeVarInt(this.key);
-        for (var i = 0; i < 303; i++) {
+        for (var i = 0; i < this.key; i++) {
             this.buffer.writeByte(i);
         }
     }
